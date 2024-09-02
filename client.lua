@@ -19,7 +19,7 @@ Citizen.CreateThread(function()
 
         local playerPos = GetEntityCoords(playerPed)
 
-        
+        if Config.MapVersion == 'chicago' then
         if playerPos.z < 95.0 then
             
             textUI("Press ~INPUT_CONTEXT~ to teleport to the ground")
@@ -43,6 +43,32 @@ Citizen.CreateThread(function()
         else
             SetEntityInvincible(playerPed, false)
             lib.hideTextUI()
+        end
+    elseif Config.MapVersion == 'custom' then
+        if playerPos.z < 20.0 then -- Change This
+            
+            textUI("Press ~INPUT_CONTEXT~ to teleport to the ground")
+
+            if IsControlJustReleased(1, 51) then
+                
+                local groundZ = 0.0
+                local foundGround, groundZ = GetGroundZFor_3dCoord(playerPos.x, playerPos.y, playerPos.z + 100.0, 0)
+
+                if foundGround then
+                    
+                    SetEntityCoords(playerPed, playerPos.x, playerPos.y, groundZ, false, false, false, true)
+                else
+                    SetEntityCoords(playerPed, playerPos.x, playerPos.y, playerPos.z + 30.0, false, false, false, true)
+                end
+            end
+        end
+
+        if playerPos.z < 20.0 then -- Change This
+            SetEntityInvincible(playerPed, true)
+        else
+            SetEntityInvincible(playerPed, false)
+            lib.hideTextUI()
+        end
         end
     end
 end)
